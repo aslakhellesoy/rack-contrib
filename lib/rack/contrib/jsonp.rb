@@ -20,6 +20,10 @@ module Rack
     def call(env)
       status, headers, response = @app.call(env)
 
+      if STATUS_WITH_NO_ENTITY_BODY.include?(status)
+        return status, headers, response
+      end
+
       headers = HeaderHash.new(headers)
       request = Rack::Request.new(env)
       
